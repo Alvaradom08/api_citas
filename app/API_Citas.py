@@ -1,10 +1,10 @@
 from fastapi import FastAPI, Depends,Query
 from sqlalchemy.orm import Session
 from .conexcionBD import SessionLocal
-from .BD import Cita
 from .Scraping import scrape
 from typing import Optional, List
 from fastapi.responses import JSONResponse
+from app import BD
 
 app = FastAPI()
 
