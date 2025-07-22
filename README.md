@@ -1,101 +1,198 @@
-# 📚 API de Citas - Extracción y Exposición de Datos
+# 📚 API de Citas — Scraping y API REST
 
-Autor: **Miguel Alvarado**  
-Repositorio: [https://github.com/Alvaradom08/api_citas](https://github.com/Alvaradom08/api_citas)
+Repositorio oficial: [https://github.com/Alvaradom08/api_citas](https://github.com/Alvaradom08/api_citas)
 
----
+## ✨ Descripción
 
-## 🎯 Objetivo General
-
-Automatizar la extracción de información del sitio [https://quotes.toscrape.com](https://quotes.toscrape.com), almacenarla en una base de datos relacional y exponerla mediante una API REST con filtros.
+Este proyecto automatiza el scraping del sitio [https://quotes.toscrape.com](https://quotes.toscrape.com), extrae citas con sus autores y etiquetas, las almacena en una base de datos relacional (SQL Server) y expone una API REST para consultarlas con filtros combinables.
 
 ---
 
-## 🌐 Sitio Objetivo
+## 🧱 Tecnologías
 
-[https://quotes.toscrape.com](https://quotes.toscrape.com)
-
----
-
-## 🧱 Requisitos Funcionales
-
-### 1. 🔍 Scraping
-
-- Se extraen: **texto de la cita**, **autor**, y **etiquetas**.
-- El scraping se ejecuta desde el script `scraping.py`.
-
-### 2. 💾 Persistencia (SQL Server)
-
-- Los datos se almacenan en una base de datos SQL Server.
-- Se evita la duplicación de autores, citas y etiquetas.
-- Se modela la relación N:N entre citas y etiquetas con SQLAlchemy.
-
-### 3. 🧭 API REST
-
-**Endpoints disponibles:**
-
-- `GET /quotes` → todas las citas
-- `GET /quotes?author=...` → filtra por autor
-- `GET /quotes?tag=...` → filtra por etiqueta
-- `GET /quotes?search=...` → búsqueda libre en el contenido
-
-> Los filtros pueden combinarse. La API responde en formato JSON.
+- 🐍 Python 3.11+
+- 🕸️ BeautifulSoup + requests (Scraping)
+- ⚡ FastAPI (API REST)
+- 🛢️ SQL Server (Base de datos relacional)
+- 🐘 SQLAlchemy (ORM)
+- 📦 Uvicorn (Servidor ASGI)
+- 🐳 Docker (opcional)
+- 📄 `.env` (para variables sensibles)
 
 ---
 
-## 💻 Tecnologías Usadas
+## 📂 Estructura del Proyecto
 
-- Python 3
-- FastAPI
-- SQLAlchemy
-- SQL Server
-- BeautifulSoup + Requests (scraping)
-- Uvicorn (servidor ASGI)
-- [pyodbc](https://github.com/mkleehammer/pyodbc) (driver para conexión a SQL Server)
+```
+api_citas/
+│
+├──app
+    ├── BD.py                # Modelos SQLAlchemy
+    ├── CRUD.py              # Operaciones DB
+    ├── estructura.py        # Esquemas Pydantic
+    ├── API_Citas.py         # FastAPI con 
+    ├── conexcionBD.py       # conexcion Base De datos (SQL Server)
+    └── scraping.py          # Script de scraping
+├── .env                     # Credenciales de conexión
+├── requirements.txt         # Dependencias del proyecto
+├── README.md                # Este archivo
+└── SCRIPBDCITAS.sql         # Script para crear tablas en SQL Server
+```
 
 ---
 
-## ⚙ Instalación y Ejecución
+## ⚙️ Instalación y ejecución
 
-### 1. Clonar el repositorio
+### 🧰 Requisitos previos
 
+- Python 3.11+
+- SQL Server en ejecución local
+- Git
+
+---
+
+### 1️⃣ Clonar el repositorio
+
+```bash
 git clone https://github.com/Alvaradom08/api_citas.git
 cd api_citas
+```
 
-### 2. Crear entorno virtual (opcional)
+### 2️⃣ Crear entorno virtual e instalar dependencias
+
+```bash
 python -m venv venv
 source venv/bin/activate  # En Windows: venv\Scripts\activate
-
-### 3. Instalar dependencias
 pip install -r requirements.txt
+```
 
-### 4. Configurar conexión a SQL Server
-Crea un archivo .env en el directorio raíz con el siguiente contenido:
-- DATABASE_URL=mssql+pyodbc://USUARIO:CONTRASEÑA@SERVIDOR/NOMBRE_BD?driver=ODBC+Driver+17+for+SQL+Server
+### 3️⃣ Configurar archivo `.env`
 
-### 5. Ejecutar el scraping (crear DB y llenar datos)
-python scraping.py
+Crea un archivo `.env` en la raíz con tu conexión a SQL Server:
 
-### 6. Levantar el servidor FastAPI
+```env
+SERVER=localhost
+DATABASE=CITASBD
+USERNAME=tu_usuario
+PASSWORD=tu_contraseña
+```
 
+> El archivo ya está incluido como plantilla en el proyecto.
+
+---
+
+### 4️⃣ Crear base de datos y tablas
+
+Abre SQL Server Management Studio y ejecuta el script:
+
+```sql
+  SCRIPBDCITAS.sql
+
+-- Tablas: autores, tags, citas, citasTag (relación N:M)
+...
+```
+
+---
+
+### 5️⃣ Ejecutar scraping (opción manual)
+
+```bash
+python scraper.py
+```
+
+Esto extraerá todas las citas y las guardará en la base de datos, evitando duplicados.
+
+---
+
+### 6️⃣ Ejecutar la API
+
+```bash
 uvicorn main:app --reload
+```
 
-## Estructura del Proyecto
-api_citas/
-├── BD.py                # Modelos SQLAlchemy
-├── crud.py              # Operaciones DB
-├── estructura.py        # Esquemas Pydantic
-├── main.py              # FastAPI con filtros
-├── scraping.py          # Script de scraping
-├── requirements.txt     # Dependencias
-├── .env                 # Config opcional
+La API estará disponible en:  
+📍 http://127.0.0.1:8000
 
-## Comandos útiles (Linux)
-### Activar entorno virtual
+---
+
+## 🚀 Endpoints 
+
+###  scraping
+```
+GET /scrape
+```
+
+
+### ✔️ Obtener todas las citas
+
+```
+GET /quotes
+```
+
+### 🔍 Filtrar por autor
+
+```
+GET /quotes?author=Albert Einstein
+```
+
+### 🔖 Filtrar por etiqueta
+
+```
+GET /quotes?tag=inspirational
+```
+
+### 📝 Búsqueda libre por contenido
+
+```
+GET /quotes?search=life
+```
+
+### 📌 Combinación de filtros
+
+```
+GET /quotes?author=Albert Einstein&tag=inspirational&search=truth
+```
+
+---
+
+## 🧪 Ejemplos de uso con `curl`
+
+```bash
+curl "http://127.0.0.1:8000/quotes?tag=truth"
+curl "http://127.0.0.1:8000/quotes?author=Albert%20Einstein"
+curl "http://127.0.0.1:8000/quotes?search=change"
+```
+
+---
+
+## 🐧 Comandos útiles en Linux
+
+```bash
+# Crear entorno virtual
+python3 -m venv venv
 source venv/bin/activate
 
-### Ejecutar scraping
-python scraping.py
+# Instalar dependencias
+pip install -r requirements.txt
 
-### Iniciar la API
+# Ejecutar scraping
+python scraper.py
+
+# Iniciar API
 uvicorn main:app --reload
+```
+
+
+
+## 👤 Autor
+
+** Juan Mateo Alvarado Montoya**  
+[https://github.com/Alvaradom08](https://github.com/Alvaradom08)
+
+---
+
+## 📄 Licencia
+
+MIT License – Libre uso académico o personal.
+
+---
