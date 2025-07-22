@@ -16,7 +16,6 @@ Este proyecto automatiza el scraping del sitio [https://quotes.toscrape.com](htt
 - 🛢️ SQL Server (Base de datos relacional)
 - 🐘 SQLAlchemy (ORM)
 - 📦 Uvicorn (Servidor ASGI)
-- 🐳 Docker (opcional)
 - 📄 `.env` (para variables sensibles)
 
 ---
