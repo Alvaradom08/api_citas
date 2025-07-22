@@ -61,7 +61,7 @@ cd api_citas
 
 ```bash
 python -m venv venv
-source venv/bin/activate  # En Windows: venv\Scripts\activate
+source venv/bin/activate  # En Windows: .\env\Scripts\activate
 pip install -r requirements.txt
 ```
 
@@ -106,7 +106,7 @@ Esto extraerá todas las citas y las guardará en la base de datos, evitando dup
 ### 6️⃣ Ejecutar la API
 
 ```bash
-uvicorn main:app --reload
+uvicorn app.API_Citas:app
 ```
 
 La API estará disponible en:  
