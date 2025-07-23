@@ -6,10 +6,10 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-SERVER = os.getenv("SQL_SERVER", "localhost")
-DATABASE = os.getenv("SQL_DATABASE", "CITASBD")
-USERNAME = os.getenv("SQL_USERNAME", "sa")
-PASSWORD = os.getenv("SQL_PASSWORD", "tu_contraseña")
+SERVER = os.getenv("SQL_SERVER")
+DATABASE = os.getenv("SQL_DATABASE")
+USERNAME = os.getenv("SQL_USERNAME")
+PASSWORD = os.getenv("SQL_PASSWORD")
 DRIVER = "ODBC Driver 17 for SQL Server"
 
 DATABASE_URL = f"mssql+pyodbc://{USERNAME}:{PASSWORD}@{SERVER}/{DATABASE}?driver={DRIVER.replace(' ', '+')}"
